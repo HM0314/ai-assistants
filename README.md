@@ -34,11 +34,6 @@ poster-flyer-assistant/
 
 
 ---
+## License
 
-## Purpose / 目的
-
-This repository is mainly used to share assistant configurations  
-with collaborators and friends.
-
-このリポジトリは主に、  
-知人や共同作業者とアシスタント設定を共有するためのものです。
+This project is released under the MIT License.
