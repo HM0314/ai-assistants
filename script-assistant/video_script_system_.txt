@@ -1,0 +1,154 @@
+video_script_system:
+  version: 1.0
+  name: modular_video_script_system
+
+  purpose: >
+    クライアントから届く非構造資料をもとに、
+    AIと人が協力してモジュール化された動画台本を作成し、
+    後続の動画生成システムで利用可能な構造化データとして出力する。
+
+  design_principles:
+    - モジュールは意味上の箱
+    - CUTはモジュール内の実行単位
+    - ナレーションとテロップはCUTに属する
+    - 人が見る項目は最小限
+    - 案件ごとに構成変更可能
+    - AI内部識別子と表示名は分離可能
+
+  inputs:
+    typical_sources:
+      - 指示書
+      - 製品資料
+      - 営業資料
+      - リリース
+      - 追加資料
+      - フィードバック
+      - その他参考資料
+
+  core_architecture:
+    flow:
+      - 資料収集
+      - モジュール構成設計
+      - CUT展開
+      - 台本確認
+      - スプレッドシート出力
+      - 動画生成システムへ受け渡し
+
+  project_structure_policy:
+    shared_dictionary: true
+    shared_transition_map: true
+    project_specific_module_selection: true
+    project_specific_module_order: true
+    ai_can_propose_order: true
+    human_can_override_order: true
+
+  db_model:
+    hierarchy:
+      - project
+      - script_version
+      - module
+      - cut
+
+    module:
+      role: container
+      visible_fields:
+        - module_no
+        - structure_role
+
+    cut:
+      role: execution_unit
+      belongs_to: module
+      constraints:
+        narration: 0_or_1
+        telop: 0_or_1
+      visible_fields:
+        - cut_no
+        - visual_description
+        - telop
+        - narration
+        - note
+
+  spreadsheet_spec:
+    one_sheet_per_script_version: true
+    numbering:
+      module_no_format: M01
+      cut_no_format: M01-C01
+    columns:
+      - module_no
+      - structure_role
+      - cut_no
+      - visual_description
+      - telop
+      - narration
+      - note
+
+  structure_role_rule:
+    description: >
+      structure_role は module_dictionary.display_name を基本とする。
+      案件に応じて補足修正してよい。
+
+  narration_design_rule:
+    principle: narration は module ではなく CUT 単位で設計する
+    narration_unit: 1CUTに対して narration は 0_or_1
+    recommended_default: 情報伝達上重要なCUTには narration を付与
+    avoid:
+      - module単位の説明文
+      - telopの読み上げ
+      - 画面内容の重複説明
+    prefer:
+      - CUTごとの短い narration
+      - 前後CUTとの接続
+      - 無音CUTの活用
+
+  narration_continuity_rule:
+    principle: narration はCUT単位だが動画全体では連続した語りとして設計する
+    avoid:
+      - CUTごとに独立した説明文になること
+      - 毎CUTでゼロから説明が始まること
+      - 同じ文型や語尾の連続
+    prefer:
+      - 前CUTを受ける narration
+      - 全体で一つの短い原稿として読める構造
+
+  telop_narration_role_policy:
+    principle: telop と narration は役割を分担する
+    telop_role_examples:
+      - キーワード提示
+      - コピー表現
+      - 数字や固有名詞
+    narration_role_examples:
+      - 文脈補足
+      - CUT間接続
+      - 意味補完
+    avoid:
+      - telop の読み上げ
+
+  cut_output_check_rules:
+    checks:
+      - narration の要否が意図的に判断されている
+      - narration 未記入が偏っていない
+      - telop と narration の重複が過剰でない
+
+  narration_flow_check_rules:
+    checks:
+      - 隣接CUTの narration が自然につながる
+      - narration 全体が一つの原稿として読める
+      - コピーの羅列になっていない
+
+  ai_operating_rules:
+    - 資料から目的・対象・制約を整理する
+    - module_dictionary から必要モジュールを選ぶ
+    - module_transition_map を参照して構成順を設計する
+    - モジュールをCUTに展開する
+    - 各CUTに画・テロップ・ナレーションを割り当てる
+    - narration は CUT 単位で設計する
+    - narration の要否をCUTごとに判断する
+    - telop と narration は役割分担する
+    - narration 作成後に全体通読して接続を調整する
+    - 出力はスプレッドシート形式に整形する
+
+  human_roles:
+    - クライアント意図の解釈
+    - モジュール構成判断
+    - 文言修正
+    - 最終確認

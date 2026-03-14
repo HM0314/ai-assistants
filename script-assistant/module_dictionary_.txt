@@ -1,0 +1,134 @@
+module_dictionary:
+  version: 1.0
+  description: 共通利用する構成モジュール辞書
+
+  modules:
+    - id: TITLE
+      display_name: タイトル
+      category: opening
+      description: 動画タイトルやサービス名を提示する導入モジュール
+
+    - id: HOOK
+      display_name: 導入フック
+      category: opening
+      description: 視聴者の関心を引く導入モジュール
+
+    - id: OPENING_CONTEXT
+      display_name: 導入背景
+      category: opening
+      description: 動画の前提やテーマ背景を簡潔に共有する
+
+    - id: PROBLEM
+      display_name: 課題
+      category: issue
+      description: 解決すべき課題を示す
+
+    - id: CURRENT_LIMITATION
+      display_name: 従来手法の限界
+      category: issue
+      description: 現状の課題や既存手法の限界を示す
+
+    - id: MARKET_CONTEXT
+      display_name: 背景・市場状況
+      category: context
+      description: 市場背景、社会背景、業界動向を示す
+
+    - id: SOLUTION
+      display_name: 解決アプローチ
+      category: solution
+      description: 課題に対する基本的な解決方向を示す
+
+    - id: SERVICE_OVERVIEW
+      display_name: サービス概要
+      category: solution
+      description: サービス全体像を簡潔に伝える
+
+    - id: FEATURE_INTRO
+      display_name: 機能紹介
+      category: detail
+      description: 主要機能を紹介する
+
+    - id: FEATURE_DETAIL
+      display_name: 機能詳細
+      category: detail
+      description: 機能の仕組みや詳細を説明する
+
+    - id: TECH_EXPLANATION
+      display_name: 仕組み説明
+      category: detail
+      description: 技術的な構造や仕組みを説明する
+
+    - id: USE_CASE
+      display_name: 活用例
+      category: application
+      description: 実際の利用シーンを示す
+
+    - id: WORKFLOW
+      display_name: 業務フロー
+      category: application
+      description: 導入後や利用時の流れを示す
+
+    - id: BENEFIT
+      display_name: 導入効果
+      category: value
+      description: 導入による価値や効果を示す
+
+    - id: RESULT
+      display_name: 結果
+      category: value
+      description: 実績や成果を示す
+
+    - id: METRIC
+      display_name: 指標
+      category: value
+      description: 定量的な成果や比較指標を示す
+
+    - id: CASE_STUDY
+      display_name: 事例紹介
+      category: evidence
+      description: 実在事例や導入事例を示す
+
+    - id: CUSTOMER_VOICE
+      display_name: お客さまの声
+      category: evidence
+      description: 利用者コメントや評価を示す
+
+    - id: EXPERT_COMMENT
+      display_name: 有識者コメント
+      category: evidence
+      description: 専門家視点の補強情報を示す
+
+    - id: STORY
+      display_name: ストーリー
+      category: narrative
+      description: 感情移入しやすい流れを作る
+
+    - id: TURNING_POINT
+      display_name: 転換点
+      category: narrative
+      description: 文脈上の切り替わりや変化点を示す
+
+    - id: COMPARISON
+      display_name: 比較
+      category: evidence
+      description: 他方式や導入前後との比較を示す
+
+    - id: DEMO
+      display_name: デモ
+      category: application
+      description: 操作や機能の実演を示す
+
+    - id: SUMMARY
+      display_name: まとめ
+      category: closing
+      description: 全体内容を要約する
+
+    - id: FUTURE
+      display_name: 今後の展望
+      category: closing
+      description: 将来性や今後の広がりを示す
+
+    - id: CTA
+      display_name: 問い合わせ
+      category: closing
+      description: 問い合わせ、相談、行動喚起を示す

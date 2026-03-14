@@ -1,0 +1,225 @@
+module_transition_map:
+  version: 1.0
+  description: モジュールの推奨接続ルール
+
+  default_start_modules:
+    - TITLE
+    - HOOK
+    - OPENING_CONTEXT
+
+  default_end_modules:
+    - SUMMARY
+    - FUTURE
+    - CTA
+
+  recommended_transitions:
+    TITLE:
+      next:
+        - HOOK
+        - OPENING_CONTEXT
+        - SERVICE_OVERVIEW
+
+    HOOK:
+      next:
+        - OPENING_CONTEXT
+        - PROBLEM
+        - MARKET_CONTEXT
+        - SERVICE_OVERVIEW
+
+    OPENING_CONTEXT:
+      next:
+        - PROBLEM
+        - MARKET_CONTEXT
+        - SERVICE_OVERVIEW
+
+    PROBLEM:
+      next:
+        - CURRENT_LIMITATION
+        - SOLUTION
+        - SERVICE_OVERVIEW
+
+    CURRENT_LIMITATION:
+      next:
+        - SOLUTION
+        - SERVICE_OVERVIEW
+        - TECH_EXPLANATION
+
+    MARKET_CONTEXT:
+      next:
+        - PROBLEM
+        - SOLUTION
+        - SERVICE_OVERVIEW
+
+    SOLUTION:
+      next:
+        - SERVICE_OVERVIEW
+        - FEATURE_INTRO
+        - TECH_EXPLANATION
+
+    SERVICE_OVERVIEW:
+      next:
+        - FEATURE_INTRO
+        - FEATURE_DETAIL
+        - TECH_EXPLANATION
+        - USE_CASE
+        - BENEFIT
+
+    FEATURE_INTRO:
+      next:
+        - FEATURE_DETAIL
+        - DEMO
+        - USE_CASE
+        - BENEFIT
+
+    FEATURE_DETAIL:
+      next:
+        - TECH_EXPLANATION
+        - DEMO
+        - USE_CASE
+        - BENEFIT
+
+    TECH_EXPLANATION:
+      next:
+        - DEMO
+        - USE_CASE
+        - BENEFIT
+        - COMPARISON
+
+    DEMO:
+      next:
+        - USE_CASE
+        - BENEFIT
+        - SUMMARY
+
+    USE_CASE:
+      next:
+        - WORKFLOW
+        - BENEFIT
+        - CASE_STUDY
+        - RESULT
+
+    WORKFLOW:
+      next:
+        - BENEFIT
+        - RESULT
+        - CTA
+
+    BENEFIT:
+      next:
+        - RESULT
+        - METRIC
+        - CASE_STUDY
+        - SUMMARY
+        - CTA
+
+    RESULT:
+      next:
+        - METRIC
+        - CASE_STUDY
+        - SUMMARY
+        - CTA
+
+    METRIC:
+      next:
+        - CASE_STUDY
+        - SUMMARY
+        - CTA
+
+    CASE_STUDY:
+      next:
+        - CUSTOMER_VOICE
+        - EXPERT_COMMENT
+        - SUMMARY
+        - CTA
+
+    CUSTOMER_VOICE:
+      next:
+        - SUMMARY
+        - FUTURE
+        - CTA
+
+    EXPERT_COMMENT:
+      next:
+        - SUMMARY
+        - FUTURE
+        - CTA
+
+    STORY:
+      next:
+        - TURNING_POINT
+        - SOLUTION
+        - BENEFIT
+        - CTA
+
+    TURNING_POINT:
+      next:
+        - SOLUTION
+        - SERVICE_OVERVIEW
+        - BENEFIT
+
+    COMPARISON:
+      next:
+        - BENEFIT
+        - RESULT
+        - SUMMARY
+
+    SUMMARY:
+      next:
+        - FUTURE
+        - CTA
+
+    FUTURE:
+      next:
+        - CTA
+
+    CTA:
+      next: []
+
+  anti_patterns:
+    - from: HOOK
+      to: CTA
+      reason: 導入直後の行動喚起は文脈不足になりやすい
+
+    - from: TITLE
+      to: CTA
+      reason: 構成が短絡的になりやすい
+
+    - from: PROBLEM
+      to: CTA
+      reason: 解決提示なしでは説得力が不足しやすい
+
+  composition_templates:
+    promotional_short:
+      recommended_sequence:
+        - TITLE
+        - HOOK
+        - SERVICE_OVERVIEW
+        - USE_CASE
+        - BENEFIT
+        - CTA
+
+    explanatory_standard:
+      recommended_sequence:
+        - TITLE
+        - OPENING_CONTEXT
+        - PROBLEM
+        - SOLUTION
+        - SERVICE_OVERVIEW
+        - FEATURE_DETAIL
+        - USE_CASE
+        - BENEFIT
+        - CTA
+
+    public_sector_formal:
+      recommended_sequence:
+        - TITLE
+        - OPENING_CONTEXT
+        - MARKET_CONTEXT
+        - PROBLEM
+        - SOLUTION
+        - SERVICE_OVERVIEW
+        - TECH_EXPLANATION
+        - USE_CASE
+        - BENEFIT
+        - SUMMARY
+        - CTA
