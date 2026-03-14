@@ -1,0 +1,258 @@
+color_palette_dictionary:
+  dictionary_name: "color_palette_dictionary"
+  version: "3.0.0"
+  purpose: >
+    ポスター・チラシ制作システムにおける配色プリセットを定義し、
+    HTML preview や後段のデザイン生成で統一感のある見た目を再利用できるようにする。
+    用途名ではなく、見え方・トーン・読みやすさの観点で palette を整理する。
+
+  design_principles:
+    - "palette は色そのものではなく、役割付きカラートークンとして定義する"
+    - "palette は module や block とは独立した見た目レイヤーとして扱う"
+    - "構図辞書と同様に、palette も用途より見え方を優先して整理する"
+    - "CTA や強調表現には accent / highlight を限定的に使い、全体の統一感を崩さない"
+    - "light / dark の背景方針と、文字のコントラストを明示する"
+
+  palette_definition_policy:
+    token_structure:
+      - "primary"
+      - "secondary"
+      - "accent"
+      - "background"
+      - "surface"
+      - "text_main"
+      - "text_sub"
+      - "border"
+      - "highlight"
+    relation_to_layout: "slot や座標を定義せず、preview / render に色トークンを渡す"
+    relation_to_branding: "公開用は匿名 palette とし、必要に応じてローカルで実名ブランド版に差し替える"
+    relation_to_copy: "copy の意味を変えず、強弱や読みやすさを補助する"
+    relation_to_preview: "palette は HTML preview の統一感と完成度を高めるために使用する"
+
+  palettes:
+    - palette_id: "trust_blue"
+      display_name: "Trust Blue"
+      tone_keywords:
+        - "trust"
+        - "clean"
+        - "structured"
+        - "calm"
+      suitable_impressions:
+        - "信頼感"
+        - "整理感"
+        - "説明的"
+        - "落ち着いた企業感"
+      avoid_impressions:
+        - "高揚感を最優先する見せ方"
+        - "強い遊び感"
+      color_tokens:
+        primary: "#0E0D6A"
+        secondary: "#009DDD"
+        accent: "#009DDD"
+        background: "#F7F9FC"
+        surface: "#FFFFFF"
+        text_main: "#111827"
+        text_sub: "#475569"
+        border: "#D7E0EA"
+        highlight: "#17A7E0"
+      usage_rules:
+        - "primary is used for key headline emphasis and major structural areas"
+        - "secondary can be used for sub-heads, diagrams, and supporting visual blocks"
+        - "accent is reserved for CTA, important labels, or numeric highlights"
+        - "background should remain light for readability"
+        - "surface should stay white or near-white for content containers"
+        - "text_main should be used on light surfaces only"
+      contrast_policy:
+        background_mode: "light"
+        cta_style: "accent_on_light"
+        headline_preference: "primary_or_text_main"
+      impression_notes:
+        - "信頼感と整理感を出しやすい"
+        - "情報量が中程度の説明紙面に向く"
+        - "過度にポップにしない方が安定する"
+
+    - palette_id: "clean_light"
+      display_name: "Clean Light"
+      tone_keywords:
+        - "minimal"
+        - "clean"
+        - "modern"
+        - "light"
+      suitable_impressions:
+        - "整理された印象"
+        - "軽さ"
+        - "現代的"
+      avoid_impressions:
+        - "重厚感を強く出したい見せ方"
+      color_tokens:
+        primary: "#2563EB"
+        secondary: "#CBD5E1"
+        accent: "#0EA5E9"
+        background: "#FFFFFF"
+        surface: "#F8FAFC"
+        text_main: "#0F172A"
+        text_sub: "#64748B"
+        border: "#E2E8F0"
+        highlight: "#38BDF8"
+      usage_rules:
+        - "keep large areas white"
+        - "use primary sparingly for clean, modern emphasis"
+        - "accent is only for CTA or small focal points"
+        - "prefer text contrast over decorative color use"
+      contrast_policy:
+        background_mode: "light"
+        cta_style: "accent_button"
+        headline_preference: "text_main_with_primary_support"
+      impression_notes:
+        - "整理感が強い"
+        - "情報をきれいに見せたい時に使いやすい"
+        - "余白を活かすレイアウトと相性が良い"
+
+    - palette_id: "bold_contrast"
+      display_name: "Bold Contrast"
+      tone_keywords:
+        - "energetic"
+        - "contrast"
+        - "high_visibility"
+        - "attention"
+      suitable_impressions:
+        - "視認性の高さ"
+        - "勢い"
+        - "人目を引く感じ"
+      avoid_impressions:
+        - "静かな高級感"
+        - "厳格で落ち着いた印象"
+      color_tokens:
+        primary: "#111827"
+        secondary: "#F97316"
+        accent: "#EF4444"
+        background: "#FFF7ED"
+        surface: "#FFFFFF"
+        text_main: "#111827"
+        text_sub: "#6B7280"
+        border: "#FED7AA"
+        highlight: "#FB923C"
+      usage_rules:
+        - "primary should anchor structure and strong text"
+        - "secondary is used for major attraction points"
+        - "accent is reserved for CTA or urgent emphasis"
+        - "avoid overusing all warm colors at once"
+      contrast_policy:
+        background_mode: "light"
+        cta_style: "accent_high_visibility"
+        headline_preference: "primary_with_secondary_support"
+      impression_notes:
+        - "視認性が高い"
+        - "強い訴求や注意喚起に向く"
+        - "使いすぎると騒がしくなるので注意"
+
+    - palette_id: "premium_dark"
+      display_name: "Premium Dark"
+      tone_keywords:
+        - "premium"
+        - "advanced"
+        - "luxury"
+        - "dark"
+      suitable_impressions:
+        - "先進感"
+        - "高級感"
+        - "重厚感"
+      avoid_impressions:
+        - "親しみやすさを最優先する見せ方"
+        - "文字量の多い全面説明"
+      color_tokens:
+        primary: "#E5E7EB"
+        secondary: "#94A3B8"
+        accent: "#38BDF8"
+        background: "#0F172A"
+        surface: "#111827"
+        text_main: "#F8FAFC"
+        text_sub: "#CBD5E1"
+        border: "#334155"
+        highlight: "#7DD3FC"
+      usage_rules:
+        - "use dark background for atmosphere, not for all dense text areas"
+        - "keep body text on high-contrast dark surfaces only"
+        - "accent should create sharp focal points"
+        - "use light text consistently"
+      contrast_policy:
+        background_mode: "dark"
+        cta_style: "accent_on_dark"
+        headline_preference: "text_main_or_primary"
+      impression_notes:
+        - "先進感・高級感が出しやすい"
+        - "ビジュアル訴求が強い構図と相性が良い"
+        - "文字量が多い紙面では一部を light surface に逃がすと安定する"
+
+    - palette_id: "eco_natural"
+      display_name: "Eco Natural"
+      tone_keywords:
+        - "natural"
+        - "soft"
+        - "fresh"
+        - "grounded"
+      suitable_impressions:
+        - "安心感"
+        - "やさしさ"
+        - "自然さ"
+      avoid_impressions:
+        - "硬質なテック感"
+      color_tokens:
+        primary: "#2F6B3C"
+        secondary: "#84CC16"
+        accent: "#F59E0B"
+        background: "#F8FAF5"
+        surface: "#FFFFFF"
+        text_main: "#1F2937"
+        text_sub: "#6B7280"
+        border: "#D9E6D2"
+        highlight: "#A3E635"
+      usage_rules:
+        - "primary is used for trust and grounded emphasis"
+        - "secondary supports natural freshness"
+        - "accent should be used sparingly for CTA or small attention points"
+        - "avoid making everything green"
+      contrast_policy:
+        background_mode: "light"
+        cta_style: "accent_or_primary_button"
+        headline_preference: "primary"
+      impression_notes:
+        - "自然・安心・やさしさを出しやすい"
+        - "柔らかい説明紙面に向く"
+        - "強いBtoB感は出しにくい"
+
+    - palette_id: "warm_service"
+      display_name: "Warm Service"
+      tone_keywords:
+        - "friendly"
+        - "approachable"
+        - "warm"
+        - "soft_energy"
+      suitable_impressions:
+        - "親しみやすさ"
+        - "やわらかさ"
+        - "近さ"
+      avoid_impressions:
+        - "厳格で堅い印象"
+      color_tokens:
+        primary: "#C2410C"
+        secondary: "#FDBA74"
+        accent: "#EA580C"
+        background: "#FFF8F3"
+        surface: "#FFFFFF"
+        text_main: "#1F2937"
+        text_sub: "#6B7280"
+        border: "#FED7AA"
+        highlight: "#FB923C"
+      usage_rules:
+        - "keep the page warm but not overly saturated"
+        - "accent should drive CTA and key focal points"
+        - "use white surface blocks to maintain readability"
+      contrast_policy:
+        background_mode: "light"
+        cta_style: "warm_accent_button"
+        headline_preference: "primary_or_text_main"
+      impression_notes:
+        - "親しみやすい印象を作りやすい"
+        - "案内や導入ハードルを下げたい紙面に向く"
+        - "硬い企業案件には少しやわらかすぎることがある"

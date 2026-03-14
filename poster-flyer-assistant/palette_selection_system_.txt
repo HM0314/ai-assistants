@@ -1,0 +1,88 @@
+palette_selection_system:
+  system_name: "palette_selection_system"
+  version: "2.0.0"
+  purpose: "案件のトーン、ターゲット、媒体特性から palette を選び、preview 用の色指定を確定する。"
+
+  role_in_pipeline:
+    position: "before_html_preview_generation"
+    inputs:
+      - "project_brief"
+      - "target_audience"
+      - "deliverable_type"
+      - "tone"
+      - "selected_template"
+      - "optional_user_feedback"
+    outputs:
+      - "selected_palette"
+      - "fallback_palette_candidates"
+      - "resolved_color_tokens"
+      - "palette_usage_notes"
+
+  design_principles:
+    - "palette は review のしやすさを損なわない"
+    - "初回 preview では可読性を優先する"
+    - "palette は block list と独立した見た目レイヤーとして扱う"
+
+  selection_rules:
+    - rule_id: "PAL_001"
+      when:
+        target_audience_in:
+          - "経営層"
+          - "決裁者"
+          - "BtoB"
+      prefer_palette:
+        - "template_a_trust_blue"
+        - "template_b_clean_light"
+
+    - rule_id: "PAL_002"
+      when:
+        tone_contains:
+          - "premium"
+          - "dark"
+      prefer_palette:
+        - "template_d_premium_dark"
+
+    - rule_id: "PAL_003"
+      when:
+        tone_contains:
+          - "clean"
+          - "minimal"
+      prefer_palette:
+        - "template_b_clean_light"
+
+  output_schema:
+    selected_palette:
+      description: "今回採用する palette"
+      fields:
+        - "palette_id"
+        - "reason"
+
+    fallback_palette_candidates:
+      description: "代替候補"
+      fields:
+        - "palette_id"
+        - "reason"
+
+    resolved_color_tokens:
+      description: "preview に渡す色トークン"
+      fields:
+        - "primary"
+        - "secondary"
+        - "accent"
+        - "background"
+        - "surface"
+        - "text_main"
+        - "text_sub"
+        - "border"
+        - "highlight"
+
+    palette_usage_notes:
+      description: "使い方メモ"
+
+  output_example_shape:
+    selected_palette:
+      palette_id: "template_a_trust_blue"
+      reason: "BtoB 説明系チラシで信頼感を出しやすいため"
+
+  human_in_the_loop_policy:
+    - "人間は preview を見た後で palette 変更を指示してよい"

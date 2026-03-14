@@ -1,0 +1,203 @@
+module_selection_system:
+  system_name: "module_selection_system"
+  version: "2.1.0"
+  purpose: "入力資料や product understanding の結果から、今回使う module と selected_layout を選び、必要なら内部実装向けの composition template 候補を返す。"
+
+  design_principles:
+    - "最初から過剰に詰め込まない"
+    - "短時間視認の媒体では主役 module を優先する"
+    - "複雑商材では explanatory module を補強する"
+    - "selected_modules は後で block list にしやすい粒度に保つ"
+    - "template 候補は用途ではなく構図・視線誘導・強調のしやすさで返す"
+
+  input_schema:
+    required_inputs:
+      - "project_name"
+      - "objective"
+      - "target_audience"
+      - "deliverable_type"
+      - "source_material_summary"
+      - "product_understanding"
+    optional_inputs:
+      - "tone"
+      - "must_include"
+      - "constraints"
+      - "page_count"
+      - "viewing_time"
+      - "decision_stage"
+      - "visual_asset_availability"
+      - "user_feedback_context"
+
+  selection_rules:
+    - rule_id: "BASE_001"
+      when:
+        objective_in:
+          - "認知獲得"
+          - "理解促進"
+      recommend_modules:
+        - "MOD_HOOK"
+        - "MOD_VALUE_PROPOSITION"
+        - "MOD_KEY_BENEFITS"
+
+    - rule_id: "BASE_002"
+      when:
+        target_audience_in:
+          - "経営層"
+          - "決裁者"
+      prioritize_modules:
+        - "MOD_VALUE_PROPOSITION"
+        - "MOD_DIFFERENTIATOR"
+        - "MOD_PROOF_EVIDENCE"
+
+    - rule_id: "BASE_003"
+      when:
+        target_audience_in:
+          - "情シス"
+          - "担当者"
+        or_product_understanding_contains:
+          - "複雑な構成"
+          - "仕組み"
+          - "データ連携"
+      recommend_modules:
+        - "MOD_CONCEPTUAL_DIAGRAM"
+        - "MOD_FEATURE_DETAILS"
+
+    - rule_id: "BASE_004"
+      when:
+        objective_in:
+          - "来場誘導"
+          - "問合せ獲得"
+          - "申込促進"
+      strongly_recommend_modules:
+        - "MOD_CALL_TO_ACTION"
+        - "MOD_NAVIGATION_AIDS"
+
+    - rule_id: "BASE_005"
+      when:
+        product_understanding_contains:
+          - "複数プラン"
+          - "料金"
+          - "比較"
+      optional_modules:
+        - "MOD_PRICE_INFO"
+        - "MOD_PLAN_MATRIX"
+
+    - rule_id: "BASE_006"
+      when:
+        product_understanding_contains:
+          - "導入事例"
+          - "活用例"
+      optional_modules:
+        - "MOD_USE_CASES"
+        - "MOD_TESTIMONIALS"
+
+  omission_rules:
+    - rule_id: "OMIT_001"
+      condition: "paper_space_is_limited"
+      likely_to_omit:
+        - "MOD_PLAN_MATRIX"
+        - "MOD_TESTIMONIALS"
+        - "MOD_PROCESS_FLOW"
+        - "MOD_FEATURE_DETAILS"
+
+    - rule_id: "OMIT_002"
+      condition: "pricing_not_disclosed"
+      likely_to_omit:
+        - "MOD_PRICE_INFO"
+        - "MOD_PLAN_MATRIX"
+
+    - rule_id: "OMIT_003"
+      condition: "no_available_evidence"
+      likely_to_omit:
+        - "MOD_PROOF_EVIDENCE"
+        - "MOD_TESTIMONIALS"
+
+  layout_default_rule:
+    default_selected_layout: "標準レイアウト"
+    note: "初稿では原則、標準レイアウトを返す。レイアウト辞書は大きな構図変更時に使う。"
+
+  template_recommendation_rules:
+    - template_id: "COMPOSITION_BALANCED_STANDARD"
+      recommended_when:
+        - "バランス型"
+        - "説明と導線の両立"
+        - "初稿の安定構成"
+
+    - template_id: "COMPOSITION_DIAGRAM_EXPLAINER"
+      recommended_when:
+        - "図解主役"
+        - "理解重視"
+        - "構成説明が必要"
+
+    - template_id: "COMPOSITION_TYPOGRAPHY_LEAD"
+      recommended_when:
+        - "大見出し主役"
+        - "遠目で強く見せたい"
+        - "認知を強めたい"
+
+    - template_id: "COMPOSITION_COMPARISON_FOCUS"
+      recommended_when:
+        - "比較表主役"
+        - "比較検討支援"
+        - "比較情報の視認性を上げたい"
+
+  output_schema:
+    selected_layout:
+      description: "初稿または現行案で採用するレイアウト名"
+    selected_modules:
+      description: "今回採用する module の一覧"
+      fields:
+        - "module_id"
+        - "selection_level"
+        - "priority_group"
+        - "reason"
+        - "notes"
+
+    omitted_modules:
+      description: "今回は採用しない module の一覧"
+      fields:
+        - "module_id"
+        - "reason"
+
+    recommended_templates:
+      description: "内部実装向けの composition template 候補"
+      fields:
+        - "template_id"
+        - "fit_reason"
+
+    selection_summary:
+      description: "全体の選定方針を短く要約したもの"
+
+  output_example_shape:
+    selection_summary: "価値訴求・強み・図解・導線を主軸にし、初稿は標準レイアウトで組む。"
+    selected_layout: "標準レイアウト"
+    selected_modules:
+      - module_id: "MOD_VALUE_PROPOSITION"
+        selection_level: "required"
+        priority_group: "primary"
+        reason: "中核価値を最初に明示する必要があるため"
+        notes: "主メッセージとして扱う"
+      - module_id: "MOD_KEY_BENEFITS"
+        selection_level: "required"
+        priority_group: "primary"
+        reason: "短時間で強みを理解させるため"
+        notes: "3点程度で整理する"
+      - module_id: "MOD_CONCEPTUAL_DIAGRAM"
+        selection_level: "recommended"
+        priority_group: "secondary"
+        reason: "仕組みが複雑で、図解が有効なため"
+        notes: "裏面中央などの大きい block が望ましい"
+      - module_id: "MOD_CALL_TO_ACTION"
+        selection_level: "required"
+        priority_group: "primary"
+        reason: "問い合わせ導線を明確にする必要があるため"
+        notes: "QR と近接させやすい"
+
+    recommended_templates:
+      - template_id: "COMPOSITION_BALANCED_STANDARD"
+        fit_reason: "説明と導線を両立しやすいバランス型のため"
+
+  human_in_the_loop_policy:
+    - "初回出力は叩き台として扱う"
+    - "人間は module の追加・削除・優先順位変更を行える"
+    - "template 推薦は強制ではなく候補提示とする"

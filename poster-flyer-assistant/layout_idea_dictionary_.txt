@@ -1,0 +1,255 @@
+layouts:
+  - layout_id: default_b2b_flyer
+    source_ref: layout_ref_default
+    layout_name: 標準レイアウト
+    layout_summary: >
+      表面は主訴求から入り、補助情報・特長・対象提示へ進む。
+      裏面は導入見出しの下で理解ブロックを整理し、下段で比較や導線を見せる、
+      最も安定したA4両面の基準構成。
+    composition_type: structured_standard
+    emphasis_style: バランス型
+    reading_flow: >
+      表面は上から下へ自然に読み進め、裏面は導入見出しから理解ブロック、
+      最後に比較・CTAへ流れる。
+    block_flexibility: semi_flexible
+    blocks:
+      - no: 1
+        place: 表・上部左
+        content: メインコピー
+        role: 主訴求の提示
+      - no: 2
+        place: 表・上部右
+        content: 補助コピーまたは対象データ
+        role: 主訴求の補強
+      - no: 3
+        place: 表・中段
+        content: 3つの特長
+        role: 強みの整理
+      - no: 4
+        place: 表・下段
+        content: 対象提示
+        role: 自分ごと化の補助
+      - no: 5
+        place: 裏・導入
+        content: 裏面見出し
+        role: 裏面を読む理由づくり
+      - no: 6
+        place: 裏・上段
+        content: 構成図または理解ブロック
+        role: 仕組み理解
+      - no: 7
+        place: 裏・中段
+        content: ユースケースまたは比較情報
+        role: 納得材料
+      - no: 8
+        place: 裏・下段右
+        content: CTAまたはQR
+        role: 行動導線
+    block_strategy: >
+      情報を大きな意味単位で切り、レビュー時に移動・追加・削除しやすい粒度を保つ。
+      比較表・構成図・CTAは独立ブロック化しやすい。
+    difference_from_default: >
+      基準レイアウトのため比較基準そのもの。派手さより安定性と説明力を優先する。
+
+  - layout_id: infographic_grid
+    source_ref: layout_ref_A
+    layout_name: タイルレイアウト
+    layout_summary: >
+      上部でテーマを提示し、下部に複数の小ブロックを
+      タイル状に並べて全体像を見せる構成。
+    composition_type: grid
+    emphasis_style: 多数情報の並列提示
+    reading_flow: >
+      上部のテーマ提示から入り、その後はZ字型または
+      興味のあるタイルを拾い読みする流れ。
+    block_flexibility: flexible
+    blocks:
+      - no: 1
+        place: 上部全面
+        content: キービジュアル＆メインタイトル
+        role: 全体テーマの提示と興味喚起
+      - no: 2
+        place: 中部〜下部（グリッド配置）
+        content: 小ブロック群（数値、要点、図表、事例など）
+        role: 複数情報の並列提示
+      - no: 3
+        place: 最下部
+        content: フッター
+        role: 発信元や補足情報の表示
+    block_strategy: >
+      情報を小さな独立ブロックに分け、並列に敷き詰める。
+      各ブロックは短い見出しと一目で分かる情報で構成しやすい。
+    difference_from_default: >
+      上から順に読ませるよりも、複数情報を一覧的に見せることに強い。
+
+  - layout_id: numbered_horizontal_bands
+    source_ref: layout_ref_B
+    layout_name: 横帯レイアウト
+    layout_summary: >
+      上部にタイトルを置き、横長の情報帯を縦に積み上げて
+      順番に説明する構成。
+    composition_type: stacked_bands
+    emphasis_style: 順序立てた説明
+    reading_flow: >
+      最上部から入り、上から下へ直線的に読み進める流れ。
+      読み順が明確で、段階説明に向く。
+    block_flexibility: semi_flexible
+    blocks:
+      - no: 1
+        place: 最上部
+        content: メインタイトル＆全体概要
+        role: テーマと目的の提示
+      - no: 2
+        place: 中段（上から順に複数）
+        content: 横長の説明ブロック群
+        role: 段階的・論理的な情報提示
+      - no: 3
+        place: 下段
+        content: まとめまたは補足情報
+        role: 結論や次のアクションの提示
+    block_strategy: >
+      情報をステップごとの横帯で区切る。
+      各帯の内部は、概要と補足、またはテキストと図を左右で組みやすい。
+    difference_from_default: >
+      標準レイアウトよりも、読み順の固定と論理展開の明快さに強い。
+
+  - layout_id: comparison_catalog
+    source_ref: layout_ref_C
+    layout_name: カタログレイアウト
+    layout_summary: >
+      上部でテーマを提示し、下部に多数の比較・事例ブロックを
+      均等に並べる構成。
+    composition_type: grid_catalog
+    emphasis_style: 比較事例の量による説得
+    reading_flow: >
+      上部のテーマ提示から入り、その後は並列に並んだ小ブロックを
+      Z字型またはランダムに拾い読みする流れ。
+    block_flexibility: flexible
+    blocks:
+      - no: 1
+        place: 上部全面
+        content: メインコピー
+        role: 課題提示や関心喚起
+      - no: 2
+        place: 中部〜下部（グリッド配置）
+        content: 比較・事例ブロック群
+        role: 多数の具体例による説得力強化
+      - no: 3
+        place: 最下部
+        content: フッター
+        role: 補足情報や発信元表示
+    block_strategy: >
+      1つの比較・改善・事例セットを最小単位として独立させる。
+      小さなブロックを揃えて配置することで、量の強さを出しやすい。
+    difference_from_default: >
+      ストーリーで順に説得するより、事例の量と一覧性で価値を伝える。
+
+  - layout_id: big_typography_lead
+    source_ref: layout_ref_D
+    layout_name: 大見出し主役レイアウト
+    layout_summary: >
+      画面の大部分を大きな文字やキーワードで支配し、
+      残りの領域に詳細情報を整理する構成。
+    composition_type: typography_hero
+    emphasis_style: 遠目で強い認知
+    reading_flow: >
+      まず巨大な文字で視線をつかみ、その後に周辺のタイトル、
+      リード文、詳細情報へと流れる。
+    block_flexibility: semi_flexible
+    blocks:
+      - no: 1
+        place: 上部〜中段（背景寄り）
+        content: 巨大なキーワード表現
+        role: 強いアイキャッチとテーマ象徴
+      - no: 2
+        place: 中段
+        content: メインタイトル＆補足タイトル
+        role: 主題の明確化
+      - no: 3
+        place: 中段周辺
+        content: リード文または要点ブロック
+        role: 読者の理解補助
+      - no: 4
+        place: 下段
+        content: 詳細情報
+        role: 必須情報の提示
+    block_strategy: >
+      巨大な文字表現を1つの主要ブロックとして扱い、
+      その周辺に説明ブロックを配置する。情報と装飾を明確に分けやすい。
+    difference_from_default: >
+      通常の説明型よりも、まず印象を強く残すことを優先しやすい。
+
+  - layout_id: full_visual_cover
+    source_ref: layout_ref_E
+    layout_name: 大ビジュアルレイアウト
+    layout_summary: >
+      画面全体を象徴的なビジュアルで覆い、
+      文字情報を最小限に抑える構成。
+    composition_type: full_visual
+    emphasis_style: 世界観・印象訴求
+    reading_flow: >
+      最初に大きなビジュアル全体を捉え、
+      その後にタイトルや発信元情報へ視線が移る流れ。
+    block_flexibility: rigid
+    blocks:
+      - no: 1
+        place: 画面全体
+        content: 大きなキービジュアル
+        role: 世界観や印象の形成
+      - no: 2
+        place: 下部付近
+        content: タイトル
+        role: 内容の最小限の明示
+      - no: 3
+        place: 最下部
+        content: ロゴまたは発信元情報
+        role: 出所の表示
+    block_strategy: >
+      情報を細かく分けず、大きなビジュアルを主役にして、
+      テキストは最小限の補助要素として置く。
+    difference_from_default: >
+      情報整理よりも、第一印象や世界観の強さを優先する構成。
+
+  - layout_id: center_spindle
+    source_ref: layout_ref_F
+    layout_name: 中央軸レイアウト
+    layout_summary: >
+      中央に強いメッセージの軸を置き、
+      左右に対比や補足情報を配置する構成。
+    composition_type: center_axis
+    emphasis_style: 中央メッセージの強い主張
+    reading_flow: >
+      導入から中央の強い主メッセージへ入り、
+      その後、左右の情報を比較・対比しながら下へ進む流れ。
+    block_flexibility: semi_flexible
+    blocks:
+      - no: 1
+        place: 上部
+        content: 導入コピー
+        role: 読み始める理由を作る
+      - no: 2
+        place: 中央
+        content: 強い主メッセージ
+        role: 最重要メッセージの提示
+      - no: 3
+        place: 左側
+        content: 課題または背景情報
+        role: 現状認識の提示
+      - no: 4
+        place: 右側
+        content: 解決策または価値情報
+        role: 解決後の価値提示
+      - no: 5
+        place: 下段
+        content: 補足図や流れ説明
+        role: 理解の補強
+      - no: 6
+        place: 最下部
+        content: フッターまたはCTA
+        role: 行動導線や補足情報
+    block_strategy: >
+      中央の主メッセージを背骨にして、左右を対比構造で組む。
+      左右ブロックは、課題と解決、現状と未来などの対照関係を作りやすい。
+    difference_from_default: >
+      上から下へ一直線ではなく、中央の主メッセージを軸に
+      左右の関係性で読ませる構図を取りやすい。

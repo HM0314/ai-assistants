@@ -1,0 +1,245 @@
+module_to_slot_mapping_system:
+  system_name: "module_to_slot_mapping_system"
+  version: "2.1.0"
+  purpose: "selected modules を、selected template に沿って review しやすい block list に落とす。"
+
+  note:
+    - "file 名は slot_mapping のままだが、この版では block mapping として扱う"
+
+  role_in_pipeline:
+    position: "between_module_selection_and_copy_generation"
+    inputs:
+      - "selected_modules"
+      - "selected_template"
+      - "poster_template_slot_schema"
+      - "optional_user_feedback"
+    outputs:
+      - "block_list_master"
+      - "review_table"
+      - "unassigned_modules"
+      - "mapping_summary"
+      - "copy_generation_targets"
+
+  design_principles:
+    - "重い slot 構造ではなく block 単位で出力する"
+    - "preview で指さしやすい場所表現を優先する"
+    - "review_table は block_list_master から派生表示する"
+    - "人間が追加・削除・入れ替えしやすい形で出す"
+    - "入りきらない module は無理に押し込まず unassigned_modules に残す"
+    - "preview に見える主要 block は、すべて block_list_master に載せる"
+
+  place_assignment_rules:
+    core_message_preferred_places:
+      - "表・上中央"
+      - "表・上部"
+
+    benefit_preferred_places:
+      - "表・中央"
+      - "表・下部"
+
+    audience_preferred_places:
+      - "表・下部"
+      - "裏・上部"
+
+    diagram_preferred_places:
+      - "裏・中央"
+      - "表・中央"
+
+    proof_preferred_places:
+      - "裏・下部"
+      - "表・下部"
+
+    cta_preferred_places:
+      - "裏・右下"
+      - "表・右下"
+
+  major_block_inclusion_policy:
+    include_if_visible:
+      - "セクション見出し"
+      - "導入見出し"
+      - "独立した説明 block"
+      - "図"
+      - "比較表"
+      - "CTA"
+    rule:
+      - "preview 上で独立して見える主要塊は 1 block として block_list_master に持つ"
+      - "review_table にも同じ block を 1 行持つ"
+
+  module_to_block_patterns:
+    - module_id: "MOD_HOOK"
+      default_label: "メインコピー"
+      preferred_places:
+        - "表・上中央"
+
+    - module_id: "MOD_VALUE_PROPOSITION"
+      default_label: "主訴求"
+      preferred_places:
+        - "表・上中央"
+        - "表・中央"
+
+    - module_id: "MOD_KEY_BENEFITS"
+      default_label: "3つの強み"
+      preferred_places:
+        - "表・中央"
+
+    - module_id: "MOD_TARGET_EMPATHY"
+      default_label: "こんな方におすすめ"
+      preferred_places:
+        - "表・下部"
+
+    - module_id: "MOD_AUDIENCE_FIT"
+      default_label: "対象者訴求"
+      preferred_places:
+        - "表・下部"
+
+    - module_id: "MOD_CONCEPTUAL_DIAGRAM"
+      default_label: "アーキテクチャ図"
+      preferred_places:
+        - "裏・中央"
+
+    - module_id: "MOD_USE_CASES"
+      default_label: "活用例"
+      preferred_places:
+        - "裏・下部"
+
+    - module_id: "MOD_PROOF_EVIDENCE"
+      default_label: "実績"
+      preferred_places:
+        - "裏・下部"
+
+    - module_id: "MOD_TESTIMONIALS"
+      default_label: "お客さまの声"
+      preferred_places:
+        - "裏・下部"
+
+    - module_id: "MOD_PRICE_INFO"
+      default_label: "料金"
+      preferred_places:
+        - "裏・下部"
+        - "表・下部"
+
+    - module_id: "MOD_PLAN_MATRIX"
+      default_label: "料金プラン"
+      preferred_places:
+        - "裏・中央"
+        - "裏・下部"
+
+    - module_id: "MOD_CALL_TO_ACTION"
+      default_label: "CTA"
+      preferred_places:
+        - "裏・右下"
+
+    - module_id: "MOD_NAVIGATION_AIDS"
+      default_label: "QR"
+      preferred_places:
+        - "裏・右下"
+        - "表・右下"
+
+  block_building_policy:
+    - "1 block = 1 review 行 を基本とする"
+    - "No, 場所, 何が書いてあるか を最小単位とする"
+    - "必要なら内部で module_id を持つが、レビュー上は簡潔さを優先する"
+    - "似た役割の module は 1 block に統合してもよい"
+    - "block label は人間が見て分かる言い方を優先する"
+    - "review_table は block_list_master を表示用に間引いたり再入力したりせず、そのまま派生させる"
+
+  output_schema:
+    block_list_master:
+      description: "紙面の master block 一覧。review_table の元データ。"
+      fields:
+        - "no"
+        - "place"
+        - "content_label"
+        - "module_ids"
+        - "notes"
+        - "is_major_visible_block"
+
+    review_table:
+      description: "人間レビュー用の構成表。block_list_master の表示用派生。"
+      fields:
+        - "no"
+        - "place"
+        - "content_label"
+
+    unassigned_modules:
+      description: "今回は block 化しなかった module"
+      fields:
+        - "module_id"
+        - "reason"
+
+    mapping_summary:
+      description: "block 配置方針を短く要約したもの"
+
+    copy_generation_targets:
+      description: "copy generation が参照する block 単位の対象"
+      fields:
+        - "no"
+        - "module_ids"
+        - "content_label"
+
+  output_example_shape:
+    mapping_summary: "表で価値と強み、裏で図解と導線を見せるBtoBチラシ構成。"
+    block_list_master:
+      - no: 1
+        place: "表・上中央"
+        content_label: "メインコピー"
+        module_ids:
+          - "MOD_HOOK"
+          - "MOD_VALUE_PROPOSITION"
+        notes: "一番強く見せる"
+        is_major_visible_block: true
+
+      - no: 2
+        place: "表・中央"
+        content_label: "3つの強み"
+        module_ids:
+          - "MOD_KEY_BENEFITS"
+        notes: "短時間視認を優先"
+        is_major_visible_block: true
+
+      - no: 3
+        place: "表・下部"
+        content_label: "こんな方におすすめ"
+        module_ids:
+          - "MOD_TARGET_EMPATHY"
+        notes: "自分事化を補強"
+        is_major_visible_block: true
+
+      - no: 4
+        place: "裏・中央"
+        content_label: "アーキテクチャ図"
+        module_ids:
+          - "MOD_CONCEPTUAL_DIAGRAM"
+        notes: "図を大きく見せる"
+        is_major_visible_block: true
+
+      - no: 5
+        place: "裏・右下"
+        content_label: "QR"
+        module_ids:
+          - "MOD_NAVIGATION_AIDS"
+          - "MOD_CALL_TO_ACTION"
+        notes: "導線を明確にする"
+        is_major_visible_block: true
+
+    review_table:
+      - no: 1
+        place: "表・上中央"
+        content_label: "メインコピー"
+      - no: 2
+        place: "表・中央"
+        content_label: "3つの強み"
+      - no: 3
+        place: "表・下部"
+        content_label: "こんな方におすすめ"
+      - no: 4
+        place: "裏・中央"
+        content_label: "アーキテクチャ図"
+      - no: 5
+        place: "裏・右下"
+        content_label: "QR"
+
+  human_in_the_loop_policy:
+    - "block_list_master をそのまま review_table の元にする"
+    - "人間は no, place, content_label を見て block の追加・削除・差し替え・移動を指示できる"
+    - "review_table だけを直接編集するのではなく、必ず block_list_master を更新する"

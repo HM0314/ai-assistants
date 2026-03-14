@@ -1,0 +1,130 @@
+poster_template_slot_schema:
+  system_name: "poster_template_slot_schema"
+  version: "2.1.0"
+  purpose: "selected_layout を内部実装向けの軽い block layout pattern に落とすための composition schema を定義する。"
+
+  note:
+    - "file 名は slot_schema のままだが、この版では重い slot schema ではなく block layout schema として扱う"
+    - "用途名で内容を増やす辞書ではなく、構図実装の補助辞書として使う"
+
+  design_principles:
+    - "人間が見て分かる block の並びを優先する"
+    - "review table にそのまま落とせる配置単位にする"
+    - "x/y 座標の厳密管理より、紙面上の大まかな場所表現を優先する"
+    - "template は固定完成形ではなく、block 配置の叩き台とする"
+    - "案件にない content を勝手に追加する理由にしない"
+
+  common_place_labels:
+    - "表・上中央"
+    - "表・上部"
+    - "表・中央"
+    - "表・下部"
+    - "表・右下"
+    - "表・左下"
+    - "裏・上部"
+    - "裏・中央"
+    - "裏・下部"
+    - "裏・右下"
+    - "裏・左下"
+
+  templates:
+    - template_id: "COMPOSITION_BALANCED_STANDARD"
+      display_name: "バランス型レイアウト"
+      composition_type: "balanced_standard"
+      emphasis_style: "説明と導線の両立"
+      default_blocks:
+        - no: 1
+          place: "表・上中央"
+          suggested_content: "メインコピー"
+        - no: 2
+          place: "表・中央"
+          suggested_content: "強み・ベネフィット"
+        - no: 3
+          place: "表・下部"
+          suggested_content: "対象者訴求"
+        - no: 4
+          place: "裏・上部"
+          suggested_content: "課題と解決"
+        - no: 5
+          place: "裏・中央"
+          suggested_content: "構成図"
+        - no: 6
+          place: "裏・下部"
+          suggested_content: "活用例 / 実績"
+        - no: 7
+          place: "裏・右下"
+          suggested_content: "QR / CTA"
+
+    - template_id: "COMPOSITION_DIAGRAM_EXPLAINER"
+      display_name: "図解主役レイアウト"
+      composition_type: "diagram_explainer"
+      emphasis_style: "理解重視"
+      default_blocks:
+        - no: 1
+          place: "表・上中央"
+          suggested_content: "メインコピー"
+        - no: 2
+          place: "表・中央"
+          suggested_content: "3つの強み"
+        - no: 3
+          place: "表・下部"
+          suggested_content: "対象提示"
+        - no: 4
+          place: "裏・上部"
+          suggested_content: "課題と解決"
+        - no: 5
+          place: "裏・中央"
+          suggested_content: "アーキテクチャ図 / 理解ブロック"
+        - no: 6
+          place: "裏・下部"
+          suggested_content: "ユースケース / 実績"
+        - no: 7
+          place: "裏・右下"
+          suggested_content: "QR / CTA"
+
+    - template_id: "COMPOSITION_TYPOGRAPHY_LEAD"
+      display_name: "大見出し主役レイアウト"
+      composition_type: "typography_lead"
+      emphasis_style: "認知重視"
+      default_blocks:
+        - no: 1
+          place: "表・上部"
+          suggested_content: "大見出し / 主メッセージ"
+        - no: 2
+          place: "表・中央"
+          suggested_content: "メインビジュアル または 主役要素"
+        - no: 3
+          place: "表・下部"
+          suggested_content: "補足情報 / 要点"
+        - no: 4
+          place: "裏・中央"
+          suggested_content: "詳細説明ブロック"
+        - no: 5
+          place: "裏・右下"
+          suggested_content: "CTA / QR"
+
+    - template_id: "COMPOSITION_COMPARISON_FOCUS"
+      display_name: "比較表主役レイアウト"
+      composition_type: "comparison_focus"
+      emphasis_style: "比較視認性重視"
+      default_blocks:
+        - no: 1
+          place: "表・上中央"
+          suggested_content: "メインコピー"
+        - no: 2
+          place: "表・中央"
+          suggested_content: "差別化ポイント"
+        - no: 3
+          place: "裏・中央"
+          suggested_content: "比較表 / プラン比較"
+        - no: 4
+          place: "裏・下部"
+          suggested_content: "補足情報 / 実績"
+        - no: 5
+          place: "裏・右下"
+          suggested_content: "CTA / QR"
+
+  human_in_the_loop_policy:
+    - "default_blocks は固定ではなく叩き台として扱う"
+    - "人間は place と suggested_content を見て block の追加・削除・入れ替えを行える"
+    - "content の種類は案件側で決まり、template 側で勝手に増やさない"

@@ -1,0 +1,282 @@
+poster_module_dictionary:
+  system_name: "poster_module_dictionary"
+  version: "2.0.0"
+  purpose: "ポスター・チラシで使う意味の部品を、軽い module 単位で定義する。"
+
+  design_principles:
+    - "module は意味の部品であり、見たまま分かる粒度を優先する"
+    - "重い slot 前提の辞書ではなく、block 化しやすい module 辞書とする"
+    - "review table に乗せやすい module を優先する"
+    - "module 名は人間が会話で扱いやすい内容に寄せる"
+
+  module_groups:
+    core_message_modules:
+      description: "紙面の主役になりやすい基本モジュール"
+      modules:
+        - "MOD_HOOK"
+        - "MOD_VALUE_PROPOSITION"
+        - "MOD_KEY_BENEFITS"
+        - "MOD_DIFFERENTIATOR"
+        - "MOD_CALL_TO_ACTION"
+
+    audience_and_context_modules:
+      description: "対象者との接続や利用イメージを補強するモジュール"
+      modules:
+        - "MOD_TARGET_EMPATHY"
+        - "MOD_AUDIENCE_FIT"
+        - "MOD_USE_CASES"
+        - "MOD_VISUAL_ANCHOR"
+
+    trust_modules:
+      description: "信頼性や安心感を補強するモジュール"
+      modules:
+        - "MOD_PROOF_EVIDENCE"
+        - "MOD_TESTIMONIALS"
+        - "MOD_COMPANY_PROFILE"
+
+    explanatory_modules:
+      description: "複雑な内容を説明・比較・図解するモジュール"
+      modules:
+        - "MOD_FEATURE_DETAILS"
+        - "MOD_CONCEPTUAL_DIAGRAM"
+        - "MOD_COMPARISON"
+        - "MOD_PLAN_MATRIX"
+
+    practical_modules:
+      description: "導線や運用情報を補うモジュール"
+      modules:
+        - "MOD_PROCESS_FLOW"
+        - "MOD_PRACTICAL_INFO"
+        - "MOD_NAVIGATION_AIDS"
+        - "MOD_PRICE_INFO"
+        - "MOD_SPECIAL_OFFER"
+
+  modules:
+    - id: "MOD_HOOK"
+      display_name: "フックコピー"
+      purpose: "一目で注意を引く"
+      typical_content:
+        - "短い強い見出し"
+        - "問題提起"
+        - "意外性のある入口"
+      typical_block_labels:
+        - "メインコピー"
+        - "大見出し"
+
+    - id: "MOD_VALUE_PROPOSITION"
+      display_name: "価値訴求"
+      purpose: "サービスや商品の中核価値を伝える"
+      typical_content:
+        - "何ができるか"
+        - "何が良いのか"
+        - "導入価値"
+      typical_block_labels:
+        - "主訴求"
+        - "価値説明"
+
+    - id: "MOD_KEY_BENEFITS"
+      display_name: "強み・ベネフィット"
+      purpose: "価値を分かりやすく分解して伝える"
+      typical_content:
+        - "強み3点"
+        - "選ばれる理由"
+        - "導入メリット"
+      typical_block_labels:
+        - "3つの強み"
+        - "ベネフィット一覧"
+
+    - id: "MOD_DIFFERENTIATOR"
+      display_name: "差別化ポイント"
+      purpose: "他との違いを短く明確にする"
+      typical_content:
+        - "独自性"
+        - "他社との違い"
+        - "選ぶ理由"
+      typical_block_labels:
+        - "違い"
+        - "選ばれる理由"
+
+    - id: "MOD_CALL_TO_ACTION"
+      display_name: "行動喚起"
+      purpose: "次の行動を明確にする"
+      typical_content:
+        - "お問い合わせ"
+        - "資料請求"
+        - "デモ案内"
+      typical_block_labels:
+        - "CTA"
+        - "問い合わせ導線"
+
+    - id: "MOD_TARGET_EMPATHY"
+      display_name: "対象者への共感"
+      purpose: "誰向けか、自分事化を促す"
+      typical_content:
+        - "こんな方におすすめ"
+        - "こんなお悩みに"
+      typical_block_labels:
+        - "おすすめ対象"
+        - "対象者訴求"
+
+    - id: "MOD_AUDIENCE_FIT"
+      display_name: "対象者適合"
+      purpose: "特定の職種・立場に合うことを示す"
+      typical_content:
+        - "経営層向け"
+        - "情シス向け"
+        - "営業向け"
+      typical_block_labels:
+        - "向いている人"
+        - "利用部門"
+
+    - id: "MOD_USE_CASES"
+      display_name: "活用例"
+      purpose: "利用イメージを具体化する"
+      typical_content:
+        - "活用シーン"
+        - "導入事例"
+        - "利用部門別例"
+      typical_block_labels:
+        - "活用例"
+        - "ユースケース"
+
+    - id: "MOD_VISUAL_ANCHOR"
+      display_name: "メインビジュアル"
+      purpose: "第一印象を作る"
+      typical_content:
+        - "ヒーロー画像"
+        - "印象的な図形"
+        - "アイキャッチ"
+      typical_block_labels:
+        - "メインビジュアル"
+
+    - id: "MOD_PROOF_EVIDENCE"
+      display_name: "実績・根拠"
+      purpose: "主張を裏付ける"
+      typical_content:
+        - "数値実績"
+        - "導入社数"
+        - "満足度"
+      typical_block_labels:
+        - "実績"
+        - "信頼材料"
+
+    - id: "MOD_TESTIMONIALS"
+      display_name: "お客さまの声"
+      purpose: "第三者の声で安心感を補強する"
+      typical_content:
+        - "導入事例要約"
+        - "利用者コメント"
+        - "体験談"
+      typical_block_labels:
+        - "お客さまの声"
+        - "導入事例"
+
+    - id: "MOD_COMPANY_PROFILE"
+      display_name: "企業情報"
+      purpose: "発信主体を明示する"
+      typical_content:
+        - "会社名"
+        - "ロゴ"
+        - "企業紹介"
+      typical_block_labels:
+        - "企業情報"
+        - "フッター"
+
+    - id: "MOD_FEATURE_DETAILS"
+      display_name: "機能詳細"
+      purpose: "機能や仕様を説明する"
+      typical_content:
+        - "機能一覧"
+        - "詳細説明"
+        - "対応範囲"
+      typical_block_labels:
+        - "機能詳細"
+        - "詳細情報"
+
+    - id: "MOD_CONCEPTUAL_DIAGRAM"
+      display_name: "アーキテクチャ図・構成図"
+      purpose: "複雑な関係や仕組みを図で理解させる"
+      typical_content:
+        - "構成図"
+        - "アーキテクチャ図"
+        - "概念図"
+      typical_block_labels:
+        - "構成図"
+        - "アーキテクチャ図"
+
+    - id: "MOD_COMPARISON"
+      display_name: "比較情報"
+      purpose: "他方式や導入前後との差を示す"
+      typical_content:
+        - "比較表"
+        - "導入前後"
+        - "従来手法との違い"
+      typical_block_labels:
+        - "比較"
+        - "比較表"
+
+    - id: "MOD_PLAN_MATRIX"
+      display_name: "プラン比較"
+      purpose: "複数プランの違いを整理する"
+      typical_content:
+        - "プラン表"
+        - "比較マトリクス"
+      typical_block_labels:
+        - "料金プラン"
+        - "プラン比較"
+
+    - id: "MOD_PROCESS_FLOW"
+      display_name: "流れ・導入手順"
+      purpose: "時系列の理解を助ける"
+      typical_content:
+        - "導入手順"
+        - "利用開始までの流れ"
+      typical_block_labels:
+        - "導入の流れ"
+        - "ステップ"
+
+    - id: "MOD_PRACTICAL_INFO"
+      display_name: "実務情報"
+      purpose: "条件や補足を整理する"
+      typical_content:
+        - "注意事項"
+        - "補足条件"
+        - "運用情報"
+      typical_block_labels:
+        - "補足情報"
+
+    - id: "MOD_NAVIGATION_AIDS"
+      display_name: "デジタル導線"
+      purpose: "紙からデジタルへ移動させる"
+      typical_content:
+        - "QR"
+        - "検索ワード"
+        - "URL"
+      typical_block_labels:
+        - "QR"
+        - "導線"
+
+    - id: "MOD_PRICE_INFO"
+      display_name: "価格情報"
+      purpose: "価格や条件を明示する"
+      typical_content:
+        - "料金"
+        - "価格条件"
+      typical_block_labels:
+        - "料金"
+        - "価格"
+
+    - id: "MOD_SPECIAL_OFFER"
+      display_name: "特典・限定情報"
+      purpose: "行動の後押しをする"
+      typical_content:
+        - "限定特典"
+        - "キャンペーン"
+      typical_block_labels:
+        - "特典"
+        - "限定案内"
+
+  human_in_the_loop_policy:
+    - "module は block 化しやすい粒度を優先する"
+    - "review 時は module 名より、block の場所と中身で会話してもよい"
+    - "人間は module の追加・削除・差し替えを行える"

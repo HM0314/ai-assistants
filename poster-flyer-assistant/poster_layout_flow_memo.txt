@@ -1,0 +1,211 @@
+poster_layout_flow_memo:
+  version: 1.1
+  purpose: >
+    レイアウト辞書を、案件内容を増やすためではなく、
+    既存contentをどう見せるかを切り替えるための構図辞書として使う。
+    初稿・通常修正・大きなレイアウト変更を分けて扱い、
+    レビュー時には現在のレイアウト名と構成表を一緒に表示する。
+
+  core_principles:
+    - レイアウト辞書は「何を作るか」ではなく「どう見せるか」に使う
+    - レイアウト変更によって案件にないcontentを勝手に追加しない
+    - 構成表は固定設計書ではなく、現在案のblock_listを見える化したもの
+    - 通常修正とレイアウト再構成を分けて扱う
+    - 選択中レイアウトはレビュー画面に表示する
+
+  fixed_elements:
+    - name: content_pool
+      description: 案件から抽出した内容素材
+    - name: display_copy_review_note_separation
+      description: 紙面文言とレビュー用説明を分離するルール
+    - name: review_table_format
+      description: >
+        レビュー表の表示形式。
+        レイアウト名1行 + No / 場所 / 何が書いてあるか の表で表示する
+
+  variable_elements:
+    - name: selected_layout
+      description: 現在採用しているレイアウト名
+    - name: block_list
+      description: その案における情報の切り方
+    - name: place_assignment
+      description: その案における各blockの配置
+
+  initial_generation_flow:
+    - step: 1
+      action: content_poolを作る
+    - step: 2
+      action: 初稿では標準レイアウトを使う
+      result:
+        selected_layout: 標準レイアウト
+    - step: 3
+      action: 標準レイアウトのblock_strategyとinitial_block_guidelineを使って初期block_listを作る
+    - step: 4
+      action: block_listをもとにプレビューを生成する
+    - step: 5
+      action: レビュー画面にレイアウト名と構成表を表示する
+
+  review_display:
+    layout_row:
+      label: レイアウト
+      value_source: selected_layout
+    table_columns:
+      - No
+      - 場所
+      - 何が書いてあるか
+
+  initial_block_guideline:
+    principles:
+      - 大きなlayout areaの中に複数content blockを保持してよい
+      - 構成表の「何が書いてあるか」には複数要素を並記してよい
+      - 後で独立修正されやすい要素は分割候補として扱う
+      - blockは粗すぎず細かすぎない粒度を優先する
+    likely_independent_blocks:
+      - メインコピー
+      - 訴求ポイント
+      - 活用対象データ
+      - 3つの特長
+      - おすすめ対象
+      - 構成図
+      - 比較表
+      - CTA
+    examples:
+      - place: 表・上部左
+        content: メインコピー / 訴求ポイント
+        note: 同一areaに複数要素を保持してよい例
+
+  feedback_types:
+    - type: content_update
+      description: 中身修正
+      examples:
+        - コピーを短く
+        - 3つの特長を2つにして
+        - 料金プランをお客さまの声に変えて
+      behavior:
+        - contentを更新する
+        - blockの中身を更新する
+        - selected_layoutは維持する
+
+    - type: partial_layout_update
+      description: 部分配置修正
+      examples:
+        - QRを左下へ
+        - 比較表を少し上へ
+        - このブロックを小さく
+      behavior:
+        - 現在のblock_listを維持する
+        - placeを調整する
+        - selected_layoutは基本維持する
+        - 必要なら親構造を崩してよい
+
+    - type: layout_recomposition
+      description: レイアウト再構成
+      examples:
+        - 全然違うレイアウトで
+        - 田の字をやめたい
+        - もっと大胆に
+        - 比較表を主役にしたい
+        - 図解中心にしたい
+        - 裏面の見せ方を変えたい
+      behavior:
+        - レイアウト辞書を使う
+        - block_listを再生成する
+        - placeも再生成する
+        - selected_layoutを更新する
+
+  layout_recomposition_detection:
+    likely_when:
+      - 特定blockや場所を指していない
+      - 面全体の見せ方について話している
+      - 別案、全然違う、イメージ違いが含まれる
+      - スペース再配分のために構図変更が必要
+    confirmation_questions:
+      - 全体的に再構成しますか？
+      - 表と裏のどちらを変えますか？（両方 / 表だけ / 裏だけ）
+
+  layout_recomposition_goals:
+    common_goal_categories:
+      - 全体のイメージが違う
+      - 別のイメージも見てみたい
+      - 要素が足りない / 要素が多すぎる
+      - 追加したい要素を入れるスペースがない
+      - 削除したスペース分だけ他を拡張したい
+
+  layout_recomposition_flow:
+    - step: 1
+      action: FBから構図変更の意図を読む
+      possible_intents:
+        - 並列感を強めたい
+        - 順番に読ませたい
+        - 大見出しを主役にしたい
+        - 比較表を強くしたい
+        - 全体像を一覧で見せたい
+    - step: 2
+      action: レイアウト辞書から候補を選ぶ
+      use_fields:
+        - layout_name
+        - layout_summary
+        - composition_type
+        - emphasis_style
+        - reading_flow
+        - block_flexibility
+        - block_strategy
+    - step: 3
+      action: selected_layoutを切り替える
+    - step: 4
+      action: 新しいselected_layoutに合わせてblock_listを再生成する
+      rules:
+        - 以前のblock_listを固定しない
+        - block数は増減してよい
+        - 1つのblockを複数blockへ分割してよい
+        - 複数blockを統合してよい
+    - step: 5
+      action: 新しいプレビューを生成し、レビュー画面のレイアウト表示も更新する
+
+  optional_improvements_connection:
+    initial_block_guideline:
+      use_at:
+        - 初稿生成時
+        - レイアウト再構成時
+      role: 粗すぎず細かすぎないblock分割を補助する
+
+    break_parent_structure_rule:
+      use_at:
+        - 部分配置修正
+        - レイアウト再構成の境界判定
+      role: >
+        既存の列や行を守りすぎず、目的達成を優先する。
+        例: 左下だけ広げたい時に左上まで連動拡張しない
+
+    goal_based_layout_adjustment:
+      use_at:
+        - FB判定時
+        - レイアウト再構成時
+      role: >
+        どこを動かしたかではなく、
+        結果として比較表が見やすいか、
+        主役が立つかを優先して判断する
+
+  strict_rules:
+    - レイアウト辞書は新しいcontent種類を勝手に追加しない
+    - 開催日時、アクセスマップ、講師情報などは案件にない限り追加しない
+    - レイアウト辞書はcontentの見せ方にのみ効く
+    - 構成表は常に現在案の結果を表示する
+    - review_noteは紙面に表示しない
+
+  screen_image:
+    order:
+      - 表面プレビュー
+      - 裏面プレビュー
+      - レイアウト行
+      - 構成表
+    layout_row_example:
+      label: レイアウト
+      value: 標準レイアウト
+
+  summary:
+    short: >
+      初稿は標準レイアウトで作る。
+      小修正は現在レイアウトのまま更新する。
+      大きな構図変更だけレイアウト辞書を使ってblock_listを再生成する。
+      選択中のレイアウト名は構成表の上に表示する。

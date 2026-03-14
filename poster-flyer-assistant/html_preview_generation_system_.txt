@@ -1,0 +1,178 @@
+html_preview_generation_system:
+  system_name: "html_preview_generation_system"
+  version: "2.1.0"
+  purpose: "block list / palette / copy を統合し、人間が確認・修正しやすい HTML preview を生成する。"
+
+  role_in_pipeline:
+    position: "between_copy_generation_and_export_preparation"
+    inputs:
+      - "project_brief"
+      - "selected_template"
+      - "block_list_master"
+      - "selected_palette"
+      - "resolved_color_tokens"
+      - "copy_blocks"
+      - "optional_visual_assets"
+      - "optional_user_feedback"
+      - "selected_layout"
+    outputs:
+      - "html_preview"
+      - "preview_metadata"
+      - "layout_display"
+      - "layout_display"
+      - "layout_display"
+      - "review_table"
+      - "preview_unresolved_items"
+
+  design_principles:
+    - "preview は完成画像ではなく、人間確認用の叩き台である"
+    - "preview と同時に、同じ block_list_master 由来の review_table を表示する"
+    - "人間が見たまま指さしで修正しやすいことを優先する"
+    - "重い review UI ではなく、preview + table の組み合わせで運用する"
+    - "未確定要素は placeholder と unresolved item として可視化する"
+    - "紙面には display_copy のみを表示し、review_note は紙面に混ぜない"
+
+  preview_structure:
+    page_order:
+      - "front_page_preview"
+      - "back_page_preview"
+      - "layout_display"
+      - "review_table"
+
+    layout_display_policy:
+      - "選択中レイアウトは review table の前に 1 行で表示する"
+      - "表示値は selected_layout の人間向け名称を使う"
+      - "レイアウト表示は preview の現在案を示すもので、固定設計書ではない"
+
+    review_table_policy:
+      - "review_table は block_list_master から派生する"
+      - "列は No / 場所 / 何が書いてあるか を基本とする"
+      - "preview を見ながらすぐ参照できる位置に置く"
+      - "preview に見える主要 block は review_table にも必ず存在する"
+
+  block_rendering_policy:
+    - "block は no ごとに安定した識別情報を持つ"
+    - "block の place と content_label が preview metadata に残る"
+    - "copy は block ごとに紐づける"
+    - "visual appearance は palette に従うが、review のしやすさを損なわない"
+    - "表示文言は copy_blocks.display_copy からのみ描画する"
+    - "copy_blocks.review_note は review 補助情報として保持してよいが、紙面には表示しない"
+
+  unresolved_item_policy:
+    placeholder_types:
+      - type: "visual_placeholder"
+        label: "visual pending"
+      - type: "diagram_placeholder"
+        label: "diagram pending"
+      - type: "copy_missing"
+        label: "copy unresolved"
+      - type: "data_missing"
+        label: "data missing"
+    rendering_behavior:
+      - "placeholder は隠さずに見せる"
+      - "未解決 block は preview_unresolved_items にも記録する"
+
+  validation_hooks:
+    - "review_table is derived from block_list_master, not manually rewritten"
+    - "every major visible block in preview must exist in review_table"
+    - "displayed copy must pass customer_facing_check"
+    - "review_note text must not appear in html_string"
+
+  output_schema:
+    html_preview:
+      description: "人間確認用の HTML preview 本体"
+      fields:
+        - "html_string"
+        - "page_count"
+        - "preview_state"
+
+    preview_metadata:
+      description: "preview 構造を保持するメタ情報"
+      fields:
+        - "template_id"
+        - "palette_id"
+        - "block_summary"
+        - "unresolved_summary"
+        - "customer_facing_copy_check"
+        - "selected_layout_name"
+
+    layout_display:
+      description: "現在選択中のレイアウト表示"
+      fields:
+        - "label"
+        - "value"
+
+    review_table:
+      description: "preview と一緒に表示する構成表"
+      fields:
+        - "no"
+        - "place"
+        - "content_label"
+
+    preview_unresolved_items:
+      description: "preview 上で未解決の要素一覧"
+      fields:
+        - "item_id"
+        - "no"
+        - "content_label"
+        - "type"
+        - "reason"
+        - "needed_input"
+
+  output_example_shape:
+    html_preview:
+      page_count: 2
+      preview_state: "review_ready"
+
+    preview_metadata:
+      template_id: "A4_FLYER_VERTICAL_B2B"
+      palette_id: "template_a_trust_blue"
+      block_summary:
+        - no: 1
+          place: "表・上中央"
+          content_label: "メインコピー"
+        - no: 2
+          place: "表・中央"
+          content_label: "3つの強み"
+        - no: 4
+          place: "裏・中央"
+          content_label: "アーキテクチャ図"
+      unresolved_summary:
+        - "diagram pending"
+      customer_facing_copy_check: "passed"
+      selected_layout_name: "標準レイアウト"
+
+    layout_display:
+      label: "レイアウト"
+      value: "標準レイアウト"
+
+    review_table:
+      - no: 1
+        place: "表・上中央"
+        content_label: "メインコピー"
+      - no: 2
+        place: "表・中央"
+        content_label: "3つの強み"
+      - no: 3
+        place: "表・下部"
+        content_label: "こんな方におすすめ"
+      - no: 4
+        place: "裏・中央"
+        content_label: "アーキテクチャ図"
+      - no: 5
+        place: "裏・右下"
+        content_label: "QR"
+
+    preview_unresolved_items:
+      - item_id: "UR_001"
+        no: 4
+        content_label: "アーキテクチャ図"
+        type: "diagram_placeholder"
+        reason: "diagram labels not finalized"
+        needed_input: "concept structure breakdown"
+
+  human_in_the_loop_policy:
+    - "初回 preview は叩き台として扱う"
+    - "人間は review_table を見ながら block 単位で修正指示を返せる"
+    - "表現の感想は preview を見た後に自然に返せばよい"
+    - "preview 承認後にのみ export preparation へ進む"

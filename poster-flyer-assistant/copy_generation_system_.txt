@@ -1,0 +1,171 @@
+copy_generation_system:
+  system_name: "copy_generation_system"
+  version: "2.1.0"
+  purpose: "selected module と block list に応じて、preview 用の copy を生成する。"
+
+  role_in_pipeline:
+    position: "between_block_mapping_and_html_preview_generation"
+    inputs:
+      - "project_brief"
+      - "selected_modules"
+      - "block_list_master"
+      - "product_understanding"
+      - "selected_template"
+      - "optional_user_feedback"
+    outputs:
+      - "copy_blocks"
+      - "copy_revision_targets"
+      - "unresolved_copy_items"
+
+  design_principles:
+    - "copy は block 単位で管理する"
+    - "レビューしやすいよう、block ごとの headline / body を分ける"
+    - "copy は完成原稿ではなく preview 用叩き台である"
+    - "長すぎる copy は避け、紙面に乗る密度を優先する"
+    - "紙面表示文言とレビュー用説明を分ける"
+    - "レビュー用説明は紙面に表示しない"
+
+  copy_levels:
+    - "headline"
+    - "supporting"
+    - "detail"
+    - "micro"
+
+  copy_purity_check:
+    purpose: "紙面に出す文が、お客さまに伝える情報になっているかを確認する"
+    reject_patterns:
+      - "整理しています"
+      - "比較できるように"
+      - "まず押さえたい"
+      - "来場者が理解しやすいように"
+      - "初稿コンセプト"
+      - "作り手向けメモ"
+    review_note_examples:
+      - "この block は図解理解の補助が目的"
+      - "この block は比較検討を助ける"
+
+  block_copy_rules:
+    - content_label_contains: "メインコピー"
+      prefer_levels:
+        - "headline"
+        - "supporting"
+
+    - content_label_contains: "主訴求"
+      prefer_levels:
+        - "headline"
+        - "supporting"
+
+    - content_label_contains: "強み"
+      prefer_levels:
+        - "headline"
+        - "detail"
+
+    - content_label_contains: "おすすめ"
+      prefer_levels:
+        - "headline"
+        - "detail"
+
+    - content_label_contains: "アーキテクチャ図"
+      prefer_levels:
+        - "headline"
+        - "micro"
+
+    - content_label_contains: "QR"
+      prefer_levels:
+        - "headline"
+        - "micro"
+
+    - content_label_contains: "料金"
+      prefer_levels:
+        - "headline"
+        - "detail"
+
+    - content_label_contains: "お客さまの声"
+      prefer_levels:
+        - "headline"
+        - "detail"
+
+  output_schema:
+    copy_blocks:
+      description: "block ごとの copy 出力"
+      fields:
+        - "no"
+        - "content_label"
+        - "display_copy"
+        - "review_note"
+
+    copy_revision_targets:
+      description: "人間が文言修正しやすい block 単位の対象一覧"
+      fields:
+        - "no"
+        - "content_label"
+        - "revision_focus"
+
+    unresolved_copy_items:
+      description: "まだ原稿化できていない要素"
+      fields:
+        - "no"
+        - "content_label"
+        - "reason"
+        - "needed_input"
+
+  display_copy_shape:
+    description: "紙面表示文言"
+    fields:
+      - "headline"
+      - "supporting"
+      - "detail"
+      - "micro"
+
+  review_note_shape:
+    description: "レビュー用補助説明。紙面には出さない"
+    fields:
+      - "intent"
+      - "copy_rationale"
+      - "audience_note"
+
+  output_example_shape:
+    copy_blocks:
+      - no: 1
+        content_label: "メインコピー"
+        display_copy:
+          headline: "社内データ活用を、AI-Ready化で前へ。"
+          supporting: "複数データソースを横断し、社内検索と活用を加速。"
+          detail: ""
+          micro: ""
+        review_note:
+          intent: "中核価値を最初に伝える"
+          copy_rationale: "短時間視認を優先"
+          audience_note: "BtoB来場者向け"
+
+      - no: 2
+        content_label: "3つの強み"
+        display_copy:
+          headline: "3つの特長"
+          supporting: ""
+          detail:
+            - "社内データに特化した高精度検索"
+            - "閉域網接続によるセキュア運用"
+            - "複数データソース横断"
+          micro: ""
+        review_note:
+          intent: "特長をスキャンしやすく見せる"
+          copy_rationale: "比較しやすい3点構成"
+          audience_note: "認知段階向け"
+
+      - no: 5
+        content_label: "QR"
+        display_copy:
+          headline: "詳しくはこちら"
+          supporting: ""
+          detail: ""
+          micro: "ブースでデモをご案内"
+        review_note:
+          intent: "導線を明確にする"
+          copy_rationale: "短い行動喚起"
+          audience_note: "会場導線向け"
+
+  human_in_the_loop_policy:
+    - "人間は no 単位で copy の差し替えを指示できる"
+    - "コピーの方向修正は block 単位で受ける"
+    - "review_note は確認用に持ってよいが、紙面には表示しない"

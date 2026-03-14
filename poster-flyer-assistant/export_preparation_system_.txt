@@ -1,0 +1,90 @@
+export_preparation_system:
+  system_name: "export_preparation_system"
+  version: "2.1.0"
+  purpose: "preview 承認後に、書き出し用の payload を整える。"
+
+  role_in_pipeline:
+    position: "after_html_preview_generation"
+    inputs:
+      - "html_preview"
+      - "preview_metadata"
+      - "review_table"
+      - "block_list_master"
+      - "selected_palette"
+      - "resolved_color_tokens"
+      - "copy_blocks"
+    outputs:
+      - "export_ready_payload"
+      - "export_validation_result"
+      - "export_targets"
+      - "export_warnings"
+      - "export_blockers"
+
+  design_principles:
+    - "承認済み preview を成果物用データに変換する"
+    - "review_table と preview_metadata の整合を確認する"
+    - "未解決要素がある場合は warning または blocker として返す"
+    - "書き出し先は HTML / SVG / PPTX / PDF を想定する"
+    - "成果物には display_copy のみを含める"
+    - "review_note は export payload に混ぜない"
+
+  validation_rules:
+    - "preview_state must be approved_for_export"
+    - "all required blocks must have copy or intentional placeholder handling"
+    - "palette tokens must be resolved"
+    - "review_table and preview_metadata block summary must not conflict"
+    - "review_table must be derived from block_list_master"
+    - "every major visible block must appear in review_table"
+    - "customer_facing_copy_check must be passed"
+    - "review_note text must not appear in export payload"
+
+  output_schema:
+    export_ready_payload:
+      description: "書き出し処理に渡す統合 payload"
+      fields:
+        - "template_id"
+        - "palette_id"
+        - "block_list_master"
+        - "display_copy_blocks"
+        - "html_preview"
+
+    export_validation_result:
+      description: "書き出し可能かどうかの判定"
+      fields:
+        - "status"
+        - "summary"
+
+    export_targets:
+      description: "想定する書き出し先"
+      values:
+        - "html"
+        - "svg"
+        - "pptx"
+        - "pdf"
+
+    export_warnings:
+      description: "書き出し前に注意すべき点"
+      fields:
+        - "warning_id"
+        - "message"
+
+    export_blockers:
+      description: "書き出しを止める要因"
+      fields:
+        - "blocker_id"
+        - "message"
+
+  output_example_shape:
+    export_validation_result:
+      status: "ready"
+      summary: "preview 承認済み。書き出し可能。"
+
+    export_targets:
+      - "html"
+      - "svg"
+      - "pptx"
+      - "pdf"
+
+  human_in_the_loop_policy:
+    - "人間が preview を承認してから export preparation に進む"
+    - "書き出し前に review_table の最終確認を行ってよい"

@@ -1,0 +1,257 @@
+# Poster System Index & Runbook
+
+## 目的
+
+このドキュメントは、ポスター・チラシ制作システム全体の役割分担、依存関係、実行順序、最小運用手順を、できるだけ軽く把握するための index です。
+
+この版では、**content_pool → selected_layout → block_list_master → preview / review → export** を中心線にします。
+旧来の template / slot 系ファイル名は残しますが、位置づけは **内部実装・補助辞書** に下げます。
+
+必須ルールは次の4点です。
+
+- レビュー用メモと紙面表示文言を分ける
+- 構成表と紙面本体の更新対象を分ける
+- 紙面文言は「お客さまに伝える情報か」を確認する
+- プレビュー上で見えている主要 block は構成表にも必ず載せる
+
+---
+
+## 全体像（主フロー）
+
+```text
+入力資料
+↓
+product understanding
+↓
+content_pool 整理
+↓
+selected_layout 決定
+  └─ 初稿は原則「標準レイアウト」
+↓
+block_list_master 生成
+  └─ review_table は block_list_master の派生表示
+↓
+palette selection
+↓
+copy generation
+  ├─ display_copy
+  └─ review_notes
+↓
+html preview generation
+  ├─ preview
+  ├─ layout row
+  └─ review table
+↓
+human feedback
+  ├─ content_update
+  ├─ partial_layout_update
+  └─ layout_recomposition
+↓
+revise and re-preview
+↓
+export preparation
+↓
+svg / pptx / pdf / html
+```
+
+---
+
+## このシステムの思想
+
+- 一発完成を狙わない
+- まず preview を出す
+- 人間が見て判断しやすい形にする
+- 重い構造化ではなく、**編集しやすい block 単位**で扱う
+- review の中心は、preview と block list を一緒に見ること
+- AI は構成と叩き台を作り、人間は差し替え・移動・追加・削除を指示する
+- レイアウト辞書は「何を作るか」ではなく「どう見せるか」に使う
+- レイアウト変更によって案件にない content を勝手に増やさない
+
+---
+
+## ファイル一覧と役割
+
+### 1. `poster_module_dictionary_.txt`
+**役割**
+- ポスター・チラシで使う「意味の部品」を定義する辞書
+- 何を伝えるか、を module 単位で保持する
+
+**位置づけ**
+- 内容の辞書
+- layout そのものではない
+
+---
+
+### 2. `layout_idea_dictionary_.txt`
+**役割**
+- 構図変更時に参照するレイアウト辞書
+- 「何を作るか」ではなく「どう見せるか」の候補を持つ
+- 案件にない content を勝手に増やさず、既存 content の見せ方を変えるために使う
+
+**使い方**
+- 初稿では原則 `標準レイアウト` を使う
+- 「全然違うレイアウトで」「田の字をやめたい」などの再構成要求で参照する
+- block_list を固定せず再生成する時のアイデア源として使う
+
+---
+
+### 3. `poster_layout_flow_memo.txt`
+**役割**
+- レイアウト辞書をシステムのどこで使うかを整理した運用メモ
+- 初稿 / 通常修正 / レイアウト再構成 の境界を定義する
+
+---
+
+### 4. `module_selection_system_.txt`
+**役割**
+- 入力資料や product understanding の結果から、今回使う module を選ぶ
+- 初稿の selected_layout を決める基準を返す
+- 必要なら内部実装向けの composition template 候補を返す
+
+**出力**
+- selected_modules
+- omitted_modules
+- selected_layout
+- recommended_templates
+- selection_summary
+
+---
+
+### 5. `poster_template_slot_schema_.txt`
+**役割**
+- file 名は slot_schema のままだが、中身は **軽い block layout schema**
+- selected_layout を実装上の block 配置パターンに落とすための補助辞書
+
+**位置づけ**
+- 主役ではなく内部実装
+- review の中心はこの schema ではなく、最終的な block_list_master
+
+---
+
+### 6. `module_to_slot_mapping_system_.txt`
+**役割**
+- selected modules と selected_layout をもとに **master block list** を作る
+- review_table はこの master block list から派生表示する
+
+**補足**
+- file 名はそのままだが、中身は slot 中心ではなく **block mapping** として扱う
+- preview に見える主要 block は、すべて master block list に 1 行持つ
+
+**出力**
+- block_list_master
+- review_table
+- unassigned_modules
+- mapping_summary
+
+---
+
+### 7. `color_palette_dictionary_.txt`
+**役割**
+- 配色プリセット辞書
+- palette を role-based color tokens として保持する
+
+---
+
+### 8. `palette_selection_system_.txt`
+**役割**
+- 案件のトーン、ターゲット、媒体特性から palette を選ぶ
+- preview 用の resolved_color_tokens を確定する
+
+---
+
+### 9. `copy_generation_system_.txt`
+**役割**
+- selected module と block list に応じて copy を生成する
+- 紙面に表示する文言と、レビュー用説明を分けて管理する
+
+---
+
+### 10. `html_preview_generation_system_.txt`
+**役割**
+- block list / palette / copy を統合して HTML preview を作る
+- review 用に、preview と同じ block list を構成表として一緒に見せる
+- 構成表の上に、現在の `selected_layout` を 1 行表示する
+- 紙面には display 用文言のみを出し、review 用メモは紙面に混ぜない
+
+---
+
+### 11. `export_preparation_system_.txt`
+**役割**
+- preview 承認後に export 用の payload を整える
+- review table / block list / copy / palette を書き出し用に整える
+- display 用文言だけが成果物に入ることを確認する
+
+---
+
+## 依存関係
+
+### 主依存
+
+- `poster_module_dictionary_.txt`
+  - content_pool と module 選定の基盤
+
+- `layout_idea_dictionary_.txt`
+  - レイアウト再構成時の候補辞書
+
+- `module_selection_system_.txt`
+  - `poster_module_dictionary_.txt` を参照
+  - 初稿では原則 `標準レイアウト` を返す
+
+- `poster_template_slot_schema_.txt`
+  - `selected_layout` を内部実装向け block pattern に落とす補助辞書
+
+- `module_to_slot_mapping_system_.txt`
+  - `selected_modules`
+  - `selected_layout`
+  - `poster_template_slot_schema_.txt`
+  - 出力は `copy_generation_system_.txt` と `html_preview_generation_system_.txt` に渡る
+
+- `copy_generation_system_.txt`
+  - `block_list_master` を参照
+  - `display_copy` と `review_note` を分離して出力する
+
+- `html_preview_generation_system_.txt`
+  - `block_list_master`
+  - `selected_layout`
+  - `selected_palette`
+  - `copy_blocks`
+  を受け取って preview を生成する
+
+- `export_preparation_system_.txt`
+  - preview 承認後の最終整形を担当する
+
+---
+
+## 最小運用手順
+
+### 初稿
+1. 入力資料から product understanding と content_pool を作る
+2. `module_selection_system` で selected modules と selected_layout を決める
+3. `module_to_slot_mapping_system` で block_list_master を作る
+4. `palette_selection_system` と `copy_generation_system` を通す
+5. `html_preview_generation_system` で
+   - 表面プレビュー
+   - 裏面プレビュー
+   - レイアウト行
+   - 構成表
+   を表示する
+
+### フィードバック後
+6. FB を次の3種類に分ける
+   - content_update
+   - partial_layout_update
+   - layout_recomposition
+7. `layout_recomposition` の時だけ `layout_idea_dictionary` を使って block_list を再生成する
+8. 再 preview する
+
+### export
+9. 承認後、`export_preparation_system` を通して出力する
+
+---
+
+## 最後の要点
+
+- 主役は **selected_layout と block_list_master**
+- template / slot は内部実装
+- review の主役は **preview + layout row + review_table**
+- レイアウト変更は content 追加ではなく、**既存 content の見せ方変更**
