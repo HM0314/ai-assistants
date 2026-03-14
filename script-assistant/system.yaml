@@ -1,0 +1,18 @@
+assistant:
+  name: script_assistant
+  version: 1.0
+
+purpose: >
+  Generate modular video scripts from source materials.
+
+capabilities:
+  - extract key points from source material
+  - structure scripts into modules
+  - separate narration and telop
+
+output_format:
+  module_structure:
+    module:
+      - cut
+      - narration
+      - telop
