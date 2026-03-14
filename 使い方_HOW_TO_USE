@@ -1,0 +1,166 @@
+# 使い方ガイド / HOW TO USE
+
+このリポジトリには、AIに読み込ませて使うためのアシスタント設定ファイルが入っています。  
+コードとして実行するツールではなく、**ChatGPT / Gemini などのAIと対話しながら制作作業を行うためのアシスタントシステム**です。
+
+---
+
+# 基本コンセプト
+
+これらのアシスタントは **一度の指示で完成物を作るツールではありません。**
+
+AIと人間が **チャットベースで共同作業するための制作ワークフロー**を提供することを目的としています。
+
+基本的な作業の流れは次のようになります。
+
+1. AIに「たたき台」を作らせる  
+2. 人間が内容を確認する  
+3. チャットで修正指示を出す  
+4. AIが修正する  
+5. 必要に応じて再度調整する  
+
+この反復によって、制作物の完成度を高めていきます。
+
+AIは「自動生成ツール」というより  
+**制作アシスタント（補助ディレクター）**として使うことを想定しています。
+
+---
+
+# 利用方法
+
+これらのアシスタントは **ChatGPT / Gemini などのAIツールのプロジェクト機能やナレッジ機能にファイルを読み込ませて使用します。**
+
+---
+
+# ChatGPT で使う方法（Projects）
+
+### 手順
+
+1. ChatGPT で **Project を新規作成**
+2. このリポジトリから必要なファイルをダウンロード
+3. Project にファイルをアップロード
+4. Project のチャットでAIに依頼
+
+### Script Assistant の場合
+
+Project に追加するファイル
+
+
+script-assistant/system.yaml
+script-assistant/video_script_system_.txt
+script-assistant/module_dictionary_.txt
+script-assistant/module_transition_map_.txt
+script-assistant/script-assistant index.txt
+
+
+### Poster / Flyer Assistant の場合
+
+Project に追加するファイル
+
+
+poster-flyer-assistant/system.yaml
+poster-flyer-assistant/# Poster System Index.txt
+poster-flyer-assistant/copy_generation_system_.txt
+poster-flyer-assistant/html_preview_generation_system_.txt
+poster-flyer-assistant/module_selection_system_.txt
+poster-flyer-assistant/module_to_slot_mapping_system_.txt
+poster-flyer-assistant/export_preparation_system_.txt
+poster-flyer-assistant/color_palette_dictionary_.txt
+poster-flyer-assistant/layout_idea_dictionary_.txt
+poster-flyer-assistant/poster_module_dictionary_.txt
+poster-flyer-assistant/poster_template_slot_schema_.txt
+
+
+---
+
+# Gemini で使う方法（Gem）
+
+### 手順
+
+1. Gemini で **New Gem** を作成
+2. Instructions にアシスタントの役割を書く
+3. **Knowledge** にファイルを追加
+4. 保存して使用
+
+追加するファイルは **ChatGPT Project と同じです。**
+
+---
+
+# Poster / Flyer Assistant の使い方
+
+ポスターアシスタントでは、AIが **HTMLプレビュー付きのレイアウト案**を生成します。
+
+基本的な流れ
+
+1. 商品やイベント情報をAIに渡す
+2. ポスター構成案を生成させる
+3. HTMLプレビューを確認する
+4. 修正指示を出す
+5. AIがレイアウトやコピーを調整
+
+HTMLプレビューを見ることで
+
+**完成イメージを確認しながらAIに修正指示を出すことができます。**
+
+例
+
+- 「この見出しを短くしてください」
+- 「ポイントを横並びにしてください」
+- 「CTAをもっと強くしてください」
+
+このようなチャット指示を繰り返すことで  
+制作物の完成度を高めていきます。
+
+※ ChatGPTでは右上の **Preview** ボタンを押すとHTMLを確認できる場合があります。
+
+---
+
+# Script Assistant の使い方
+
+台本アシスタントでは、AIが **構成表（module / cut）**を生成します。
+
+基本的な流れ
+
+1. 元資料をAIに渡す
+2. モジュール構成を生成
+3. 構成表を確認
+4. チャットで構成を修正
+5. ナレーションやテロップを改善
+
+例
+
+- 「このブロックを導入の前に移動してください」
+- 「ナレーションをもう少しストーリー性のある表現にしてください」
+- 「この部分に具体例を追加してください」
+
+構成表を見ながら **ブロック単位で編集できる**のが特徴です。
+
+---
+
+# ファイル構造
+
+迷った場合は、次の順番でファイルを確認してください。
+
+
+system.yaml
+↓
+index / runbook
+↓
+*_system
+↓
+*_dictionary
+↓
+*_schema
+
+
+system.yaml が **アシスタントのエントリーポイント**です。
+
+---
+
+# 注意
+
+このリポジトリは
+
+- 実行プログラムではありません
+- AIに読み込ませるための **知識ファイル / プロンプトシステム**です
+- AIツールのUI変更によって操作方法が変わる可能性があります
