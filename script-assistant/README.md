@@ -1,9 +1,15 @@
-# Script Assistant
+## System Structure
 
-AI assistant for generating structured video scripts.
+This assistant is composed of several subsystems:
 
-## Function
+video_script_system
+Main script generation system.
 
-- Converts source materials into modular script structure
-- Supports narration and telop separation
-- Outputs spreadsheet-ready script format
+module_dictionary
+Defines reusable script modules.
+
+module_transition_map
+Defines allowed transitions between modules.
+
+system.yaml
+Configuration entry point for the assistant.
