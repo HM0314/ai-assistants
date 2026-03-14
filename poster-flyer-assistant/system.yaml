@@ -1,0 +1,20 @@
+assistant:
+  name: poster_flyer_assistant
+  version: 1.0
+
+purpose: >
+  Generate structured poster and flyer layouts from source materials.
+
+capabilities:
+  - extract product and service information
+  - organize content into layout blocks
+  - define hierarchy for headlines, body text, and callouts
+  - prepare outputs for design workflows
+
+output_format:
+  layout_structure:
+    - title
+    - subtitle
+    - key_visual
+    - body
+    - call_to_action
